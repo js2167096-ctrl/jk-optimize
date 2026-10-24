@@ -12,3 +12,6 @@ minha chave jk/
 
 # Lixo de ferramenta, não pertence ao projeto.
 Microsoft/
+
+# Ferramentas externas (ex.: REA e Node portátil), não fazem parte do app.
+tools/

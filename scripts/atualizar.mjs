@@ -53,6 +53,7 @@ if (!existsSync(installer)) {
   process.exit(1)
 }
 removeOldReleases(version)
+publicarNoGitHub(version, installer)
 
 // Manifesto assinado para o atualizador do app (opcional: precisa da senha do proprietário).
 step('Manifesto de atualização assinado')
@@ -82,6 +83,32 @@ if (process.env.JKO_OWNER_PASSPHRASE) {
   console.log(`Gerado em ${updateDir} (publique os dois arquivos juntos).`)
 } else {
   console.log('Pulado: defina JKO_OWNER_PASSPHRASE para gerar o jk-update.json assinado.')
+}
+
+function publicarNoGitHub(version, installerPath) {
+  step('Publicando no GitHub (pasta builds/)')
+  try {
+    const buildsDir = join(root, 'builds')
+    mkdirSync(buildsDir, { recursive: true })
+    const destName = `JK-Optimize-Setup-${version}.exe`
+    copyFileSync(installerPath, join(buildsDir, destName))
+
+    const run = (args) => spawnSync('git', args, { cwd: root, stdio: 'inherit' })
+    run(['add', 'builds', 'package.json'])
+    const commit = run(['commit', '-m', `build: v${version}\n\nCo-Authored-By: Claude Sonnet 5 <noreply@anthropic.com>`])
+    if (commit.status !== 0) {
+      console.log('Nada novo para commitar (ou falha no commit) — pulando push.')
+      return
+    }
+    const push = run(['push', 'origin', 'HEAD:main'])
+    if (push.status !== 0) {
+      console.log('\nAviso: não consegui dar push automaticamente. Rode manualmente: git push origin HEAD:main')
+    } else {
+      console.log(`Build v${version} publicado em builds/${destName} no GitHub.`)
+    }
+  } catch (e) {
+    console.log(`Aviso: publicação no GitHub falhou (${e.message}). O app foi atualizado normalmente mesmo assim.`)
+  }
 }
 
 function isRunning() {
