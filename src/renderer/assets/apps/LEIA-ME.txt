@@ -1,0 +1,3 @@
+Ícones oficiais dos aplicativos do catálogo (opcional).
+Nome do arquivo = id do aplicativo em src/shared/constants/apps-catalog.ts (ex.: chrome.svg, steam.png).
+Sem arquivo, o cartão mostra um monograma. Use apenas ícones que o fabricante permita usar.

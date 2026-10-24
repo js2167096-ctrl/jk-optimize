@@ -1,0 +1,174 @@
+/*
+ * Tokens de design do JK Optimize.
+ * Para mudar a tonalidade do aplicativo, altere apenas os valores abaixo:
+ * todos os componentes usam estas variáveis por meio das classes do Tailwind
+ * (bg-surface, text-muted, text-performance etc.).
+ *
+ * Temas: o padrão é "azul" (preto e azul-marinho, destaque azul elétrico).
+ * O tema "vermelho" (preto e vermelho) fica em [data-theme='red'] e é escolhido em Configurações.
+ */
+:root {
+  /* Superfícies (preto e azul-marinho) */
+  --jk-bg: #060a13;
+  --jk-bg-elevated: #09101d;
+  --jk-surface: #0e1524;
+  --jk-surface-2: #131c2e;
+  --jk-surface-3: #1a2539;
+
+  /* Linhas e bordas */
+  --jk-line: #1a2335;
+  --jk-line-strong: #27334a;
+
+  /* Texto */
+  --jk-fg: #f4f6fa;
+  --jk-muted: #a8b5c8;
+  --jk-subtle: #687590;
+
+  /* Identidade: azul elétrico principal e de destaque */
+  --jk-accent: #2f7bff;
+  --jk-accent-hi: #4d90ff;
+  --jk-accent-rgb: 47 123 255;
+  --jk-glow: 0 0 18px -4px rgb(var(--jk-accent-rgb) / 0.55);
+  /* Prata metálico do nome "OPTIMIZER" na logo oficial. */
+  --jk-silver-hi: #eef2f8;
+  --jk-silver: #8d98ab;
+
+  /* Destaques por função (mantêm os nomes usados pelos componentes) */
+  --jk-performance: var(--jk-accent); /* destaque principal, seleção, progresso */
+  --jk-optimize: #2fbf71; /* estados positivos */
+  --jk-advanced: #8796ae; /* ferramentas avançadas (cinza azulado discreto) */
+  --jk-info: #6cb4ff; /* informações neutras */
+  --jk-alert: #ffa24a; /* alertas */
+  --jk-diagnostic: #f2c94c; /* diagnósticos */
+  --jk-danger: #ff5a6b; /* erros e ações destrutivas */
+
+  /* Forma e tipografia */
+  --jk-radius: 12px;
+  --jk-radius-sm: 8px;
+  --jk-window-radius: 14px;
+  --jk-font-sans: 'Segoe UI Variable Text', 'Segoe UI', system-ui, sans-serif;
+  --jk-font-mono: 'Cascadia Mono', 'Cascadia Code', Consolas, monospace;
+}
+
+/* Tema alternativo: preto e vermelho. */
+:root[data-theme='red'] {
+  --jk-bg: #05070b;
+  --jk-bg-elevated: #080b11;
+  --jk-surface: #0b0e14;
+  --jk-surface-2: #10141c;
+  --jk-surface-3: #171d28;
+  --jk-line: #1d2632;
+  --jk-line-strong: #2a3546;
+  --jk-muted: #a8b5c5;
+  --jk-subtle: #687588;
+  --jk-accent: #ff1835;
+  --jk-accent-hi: #ff293f;
+  --jk-accent-rgb: 255 24 53;
+  --jk-info: #5b8def;
+  --jk-alert: #ff8a3d;
+  --jk-danger: #ff4d5e;
+}
+
+/*
+ * Temas de cores. Cada tema redefine apenas destaque, sombra e tom das superfícies (sempre escuras).
+ * --jk-on-accent: cor do texto sobre o destaque (contraste). --jk-logo-filter: giro de matiz aplicado
+ * somente à camada de brilho da logo (o personagem e a máscara permanecem escuros).
+ * Todos os temas usam a mesma lista de funções de filtro para a troca animar suavemente.
+ */
+:root {
+  --jk-on-accent: #ffffff;
+  /* Fundo dos botões primários: tom do destaque com contraste >= 4,5:1 contra o texto (--jk-on-accent). */
+  --jk-accent-btn: #2160d6;
+  --jk-logo-filter: hue-rotate(0deg) saturate(1) brightness(1);
+}
+:root[data-theme='red'] {
+  --jk-accent-btn: #d90f2c;
+  --jk-logo-filter: hue-rotate(137deg) saturate(1) brightness(1);
+}
+:root[data-theme='ruby'] {
+  --jk-bg: #0a060c;
+  --jk-bg-elevated: #0e0911;
+  --jk-surface: #140c17;
+  --jk-surface-2: #1a1120;
+  --jk-surface-3: #23182b;
+  --jk-line: #261a2d;
+  --jk-line-strong: #38263f;
+  --jk-muted: #b9a9c4;
+  --jk-subtle: #7d6b89;
+  --jk-accent: #e11d74;
+  --jk-accent-hi: #f2488f;
+  --jk-accent-rgb: 225 29 116;
+  --jk-info: #c58bff;
+  --jk-accent-btn: #c4155f;
+  --jk-logo-filter: hue-rotate(122deg) saturate(1) brightness(1);
+}
+:root[data-theme='violet'] {
+  --jk-bg: #07060f;
+  --jk-bg-elevated: #0b0914;
+  --jk-surface: #110e1f;
+  --jk-surface-2: #171329;
+  --jk-surface-3: #201b37;
+  --jk-line: #211c35;
+  --jk-line-strong: #322a4d;
+  --jk-muted: #b4aed0;
+  --jk-subtle: #756e96;
+  --jk-accent: #9b5cff;
+  --jk-accent-hi: #b07dff;
+  --jk-accent-rgb: 155 92 255;
+  --jk-info: #8fb0ff;
+  --jk-accent-btn: #7a3de0;
+  --jk-logo-filter: hue-rotate(51deg) saturate(1) brightness(1);
+}
+:root[data-theme='emerald'] {
+  --jk-bg: #040b09;
+  --jk-bg-elevated: #07110e;
+  --jk-surface: #0b1814;
+  --jk-surface-2: #10201b;
+  --jk-surface-3: #172b24;
+  --jk-line: #17261f;
+  --jk-line-strong: #243a31;
+  --jk-muted: #a6c0b6;
+  --jk-subtle: #688076;
+  --jk-accent: #10b981;
+  --jk-accent-hi: #34d399;
+  --jk-accent-rgb: 16 185 129;
+  --jk-optimize: #4ade80;
+  --jk-on-accent: #04130d;
+  --jk-accent-btn: #10b981;
+  --jk-logo-filter: hue-rotate(-55deg) saturate(1.1) brightness(1);
+}
+:root[data-theme='gold'] {
+  --jk-bg: #0a0805;
+  --jk-bg-elevated: #0f0c07;
+  --jk-surface: #17120a;
+  --jk-surface-2: #1e180d;
+  --jk-surface-3: #292113;
+  --jk-line: #2a2213;
+  --jk-line-strong: #40351d;
+  --jk-muted: #c4b89f;
+  --jk-subtle: #8a7d62;
+  --jk-accent: #f5b301;
+  --jk-accent-hi: #ffc933;
+  --jk-accent-rgb: 245 179 1;
+  --jk-info: #7fb7ff;
+  --jk-on-accent: #1a1203;
+  --jk-accent-btn: #f5b301;
+  --jk-logo-filter: hue-rotate(-160deg) saturate(1.15) brightness(1.1);
+}
+:root[data-theme='cyan'] {
+  --jk-bg: #040b10;
+  --jk-bg-elevated: #07111a;
+  --jk-surface: #0b1822;
+  --jk-surface-2: #10212e;
+  --jk-surface-3: #172c3c;
+  --jk-line: #162735;
+  --jk-line-strong: #234257;
+  --jk-muted: #a3bccb;
+  --jk-subtle: #64808f;
+  --jk-accent: #00c8ff;
+  --jk-accent-hi: #33d6ff;
+  --jk-accent-rgb: 0 200 255;
+  --jk-on-accent: #02121a;
+  --jk-accent-btn: #00c8ff;
+  --jk-logo-filter: hue-rotate(-30deg) saturate(1) brightness(1);
+}

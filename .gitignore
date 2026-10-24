@@ -1,0 +1,14 @@
+node_modules/
+out/
+release/
+.test-build/
+.e2e-shots/
+*.log
+.DS_Store
+
+# Chave privada do proprietário: NUNCA versionar nem distribuir.
+owner-keys/
+minha chave jk/
+
+# Lixo de ferramenta, não pertence ao projeto.
+Microsoft/

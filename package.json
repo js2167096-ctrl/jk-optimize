@@ -1,0 +1,46 @@
+{
+  "name": "jk-optimize",
+  "productName": "JK Optimize",
+  "version": "0.1.23",
+  "description": "JK Optimize — painel de otimização e diagnóstico para Windows",
+  "author": "JK Optimize",
+  "private": true,
+  "main": "./out/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "start": "electron-vite preview",
+    "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
+    "build": "npm run typecheck && electron-vite build",
+    "test": "node scripts/run-tests.mjs",
+    "owner:init": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/owner-init.mjs",
+    "dist": "npm run build && electron-builder --win --config electron-builder.yml",
+    "atualizar": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/atualizar.mjs",
+    "test:windows": "node scripts/e2e/windows-integration.mjs",
+    "owner:autoridade": "node scripts/owner-autoridade.mjs",
+    "owner:instalar": "node scripts/owner-instalar.mjs",
+    "owner:senha": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/owner-senha.mjs"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^22.20.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^5.2.0",
+    "electron": "^37.10.3",
+    "electron-builder": "^26.15.3",
+    "electron-vite": "^4.0.1",
+    "esbuild": "^0.25.12",
+    "lucide-react": "^1.61.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~5.9",
+    "vite": "^7.3.7"
+  },
+  "allowScripts": {
+    "electron@37.10.3": true,
+    "esbuild@0.25.12": true,
+    "esbuild@0.28.2": true,
+    "electron-winstaller@5.4.0": true
+  }
+}

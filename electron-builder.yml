@@ -1,0 +1,27 @@
+appId: com.jkoptimize.app
+productName: JK Optimize
+copyright: Copyright © JK Optimize
+directories:
+  output: release/${version}
+  buildResources: build
+files:
+  - out/**/*
+  - package.json
+  - "!**/*.map"
+asar: true
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+  artifactName: JK-Optimize-Setup-${version}.${ext}
+  # O aplicativo roda sem privilégios de administrador. Tarefas futuras que
+  # precisarem de elevação devem solicitá-la de forma explícita e pontual.
+  requestedExecutionLevel: asInvoker
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: JK Optimize
+  uninstallDisplayName: JK Optimize
