@@ -4,6 +4,9 @@ import type { Deps, InteractionLike } from './commands/types.js'
 import { ConfigError, loadConfig } from './config.js'
 import { openDatabase } from './db/index.js'
 import { handleCommand, RateLimiter } from './handler.js'
+import { handleButton } from './servidor/buttons.js'
+import { discordGuildPort } from './servidor/discord-port.js'
+import type { ButtonLike } from './commands/types.js'
 import { createLogger } from './logger.js'
 
 async function main(): Promise<void> {
@@ -22,7 +25,12 @@ async function main(): Promise<void> {
   const db = openDatabase(config.databasePath)
   // Fase 1 só precisa do intent Guilds (não privilegiado).
   const client = new Client({ intents: [GatewayIntentBits.Guilds] })
-  const deps: Deps = { config, db, log, startedAt: Date.now(), wsPing: () => client.ws.ping }
+  const deps: Deps = { config, db, log, startedAt: Date.now(), wsPing: () => client.ws.ping,
+    guildPort: (guildId) => {
+      const guild = client.guilds.cache.get(guildId)
+      return guild ? discordGuildPort(guild) : null
+    }
+  }
   const commands = commandMap(COMMANDS)
   const limiter = new RateLimiter(5, 10_000)
 
@@ -30,8 +38,11 @@ async function main(): Promise<void> {
     log.info('Bot conectado ao Discord', { user: ready.user.tag, guilds: ready.guilds.cache.size })
   })
   client.on(Events.InteractionCreate, (interaction) => {
-    if (!interaction.isChatInputCommand()) return
-    void handleCommand(interaction as unknown as InteractionLike, commands, deps, limiter)
+    if (interaction.isChatInputCommand()) {
+      void handleCommand(interaction as unknown as InteractionLike, commands, deps, limiter)
+    } else if (interaction.isButton()) {
+      void handleButton(interaction as unknown as ButtonLike, deps)
+    }
   })
   client.on(Events.Error, (error) => log.error('Erro do cliente Discord', { error }))
 

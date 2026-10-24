@@ -10,6 +10,11 @@ export const BASE_PERMISSIONS: readonly bigint[] = [
 /** Necessárias para os módulos de administração (Fase 2+). Solicitadas só com `--admin`. */
 export const ADMIN_PERMISSIONS: readonly bigint[] = [
   ...BASE_PERMISSIONS,
+  // O bot só consegue conceder em cargos e canais o que ele mesmo possui.
+  PermissionFlagsBits.ReadMessageHistory,
+  PermissionFlagsBits.AttachFiles,
+  PermissionFlagsBits.Connect,
+  PermissionFlagsBits.Speak,
   PermissionFlagsBits.ManageRoles,
   PermissionFlagsBits.ManageChannels,
   PermissionFlagsBits.ManageMessages,

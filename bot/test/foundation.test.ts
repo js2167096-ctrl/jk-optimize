@@ -58,8 +58,8 @@ test('logger: respeita o nível mínimo', () => {
 
 test('banco: migrações são aplicadas uma vez e são idempotentes', () => {
   const db = openDatabase(':memory:')
-  assert.equal(schemaVersion(db), 1)
-  assert.equal(schemaVersion(db), 1)
+  assert.equal(schemaVersion(db), 2)
+  assert.equal(schemaVersion(db), 2)
   db.close()
 })
 
@@ -117,6 +117,7 @@ function fakeInteraction(over: Partial<InteractionLike> = {}) {
     guildId: '323456789012345678',
     memberPermissions: { bitfield: PermissionFlagsBits.SendMessages },
     appPermissions: { bitfield: combine(BASE_PERMISSIONS) },
+    options: { getSubcommand: () => '', getString: () => null, getInteger: () => null, getChannel: () => null },
     replied: false,
     deferred: false,
     reply: async (o) => {
@@ -137,7 +138,8 @@ function makeDeps(ownerIds: string[] = []): Deps {
     db: openDatabase(':memory:'),
     log: createLogger({ level: 'error', write: (l) => lines.push(l) }),
     startedAt: Date.now() - 65_000,
-    wsPing: () => 42
+    wsPing: () => 42,
+    guildPort: () => null
   }
 }
 
@@ -154,7 +156,7 @@ test('handler: administrador recebe o diagnóstico real e a execução é audita
   const { i, replies } = fakeInteraction({ memberPermissions: { bitfield: PermissionFlagsBits.ManageGuild } })
   const deps = makeDeps()
   await handleCommand(i, commandMap(), deps, new RateLimiter(5, 1000))
-  assert.match(replies[0], /Banco de dados: OK \(migração v1\)/)
+  assert.match(replies[0], /Banco de dados: OK \(migração v2\)/)
   assert.match(replies[0], /Gateway: 42 ms/)
   assert.match(replies[0], /Permissões básicas neste canal: OK/)
   assert.match(replies[0], /faltam .*ManageRoles/)

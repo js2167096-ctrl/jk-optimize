@@ -3,7 +3,7 @@
 Serviço **independente** do app desktop: se o bot cair, o JK Optimize continua funcionando.
 Este diretório tem o seu próprio `package.json`; nada do app principal foi alterado.
 
-## Estado atual: Fase 1 (fundação)
+## Estado atual: Fases 1 e 2
 
 Implementado e testado:
 
@@ -15,12 +15,24 @@ Implementado e testado:
 - Limite de uso por usuário (5 comandos / 10 s) e encerramento controlado (SIGINT/SIGTERM).
 - Scripts: `doctor` (verificação inicial), `commands:deploy`, `invite`.
 
-**Ainda não implementado** (fases seguintes): administração de cargos/canais/modelos, boas-vindas,
-moderação, tickets, IA, integração de keys, loja/entrega e painel. Nada disso responde a comandos ainda.
+### Fase 2 — administração de servidores (implementada)
+
+- `/servidor modelos` lista 6 modelos: clientes-jk, vendas-digitais, suporte-tecnico, comunidade-gamer, produto-premium, atendimento-pos-venda.
+- `/servidor previa modelo:<m>` mostra o que seria criado, sem alterar nada.
+- `/servidor aplicar modelo:<m>` mostra a prévia e só cria depois de você clicar em **Confirmar**.
+  Apenas cria: o que já existe (mesmo nome) não é alterado e nada é apagado.
+- `/servidor desfazer` apaga só o que o último lote criou (com confirmação). Categorias que ganharam canais de outras pessoas são mantidas.
+- `/slowmode canal segundos` define o modo lento (0 a 21600).
+- Cada item criado é gravado no banco na hora (tabelas `change_batches` e `change_items`) e toda ação é auditada.
+- Os modelos nunca concedem Administrador, Gerenciar Servidor nem Gerenciar Cargos. **Dê Administrador ao seu cargo você mesmo, se quiser.**
+- Para estes comandos o bot precisa do convite com permissões de administração: `npm run invite -- --admin` (autorize de novo no mesmo servidor).
+- Limitações: os modelos ainda não são editáveis por comando (edite `src/servidor/templates.ts`); boas-vindas e moderação ainda não foram feitas; canais criados em categorias que já existiam recebem as permissões do modelo explicitamente.
+
+**Ainda não implementado** (fases seguintes): boas-vindas, moderação, tickets, IA, integração de keys, loja/entrega e painel.
 
 ## Requisitos
 
-Node.js 22.5 ou superior (testado no 24.20) e npm.
+Node.js 22.9 ou superior (testado no 24.20) e npm.
 
 ## Passo a passo
 
@@ -44,7 +56,7 @@ Node.js 22.5 ou superior (testado no 24.20) e npm.
 
 ```
 npm run typecheck
-npm test        # compila e roda 19 testes (config, logs, banco, permissões, handler)
+npm test        # compila e roda 33 testes (config, logs, banco, permissões, handler, modelos, diff, aplicar, desfazer, botões)
 ```
 
 ## Segurança

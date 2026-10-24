@@ -4,14 +4,14 @@
   "description": "JK Optimize Bot — serviço independente de administração, suporte e vendas para Discord",
   "private": true,
   "type": "module",
-  "engines": { "node": ">=22.5.0" },
+  "engines": { "node": ">=22.9.0" },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "start": "npm run build && node dist/src/index.js",
-    "doctor": "npm run build && node dist/src/scripts/doctor.js",
-    "commands:deploy": "npm run build && node dist/src/scripts/deploy-commands.js",
-    "invite": "npm run build && node dist/src/scripts/invite.js",
+    "start": "npm run build && node --env-file-if-exists=.env dist/src/index.js",
+    "doctor": "npm run build && node --env-file-if-exists=.env dist/src/scripts/doctor.js",
+    "commands:deploy": "npm run build && node --env-file-if-exists=.env dist/src/scripts/deploy-commands.js",
+    "invite": "npm run build && node --env-file-if-exists=.env dist/src/scripts/invite.js",
     "test": "npm run build && node --test \"dist/test/*.test.js\""
   },
   "dependencies": {
