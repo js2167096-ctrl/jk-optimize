@@ -5,7 +5,7 @@ import { formatBytes } from '@shared/format'
 import { Badge, Button, Card, Notice, PageHeader, ProgressBar } from '../../components/ui'
 import { DataTable, Metric, QueryView, RefreshButton } from '../../components/kit'
 import { useAction } from '../../components/ActionRunner'
-import { usePerf } from '../../hooks/usePerf'
+import { nextSampleAfter, usePerf } from '../../hooks/usePerf'
 import { useQuery } from '../../hooks/useQuery'
 
 interface RamApp { pid: number; name: string; description: string | null; startTime: string; hasWindow: boolean; workingSet: number; privateWorkingSet: number | null }
@@ -29,9 +29,11 @@ export function MemoryPage() {
     const outcome = await run('ram.closeApps', { targets, force })
     if (!outcome) return
     setPicked(new Set())
+    // Dá tempo para o Windows devolver a memória e usa a primeira amostra NOVA do coletor (não o valor da renderização anterior).
     await new Promise((r) => setTimeout(r, 2500))
     ram.reload()
-    const after = perf.sample?.memory.availableBytes ?? null
+    const fresh = await nextSampleAfter(Date.now(), 8000)
+    const after = fresh?.memory.availableBytes ?? null
     setResult(`${outcome.summary} Memória disponível: ${before != null ? formatBytes(before) : '—'} → ${after != null ? formatBytes(after) : '—'} (leituras reais do Windows; a diferença pode incluir outras atividades do sistema).`)
   }
 

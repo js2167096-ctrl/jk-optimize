@@ -10,7 +10,8 @@ $board = Safe { Get-CimInstance Win32_BaseBoard | Select-Object -First 1 }
 $cs = Safe { Get-CimInstance Win32_ComputerSystem | Select-Object -First 1 }
 $cpu = Safe { Get-CimInstance Win32_Processor | Select-Object -First 1 }
 $mem = @(Safe { Get-CimInstance Win32_PhysicalMemory })
-$fw = Safe { [int](Get-ItemProperty 'HKLM:\\SYSTEM\\CurrentControlSet\\Control' -ErrorAction Stop).PEFirmwareType }
+$fw = Safe { $t = (Get-ItemProperty 'HKLM:\\SYSTEM\\CurrentControlSet\\Control' -Name PEFirmwareType -ErrorAction Stop).PEFirmwareType; if ($t -in 1, 2) { [int]$t } else { $null } }
+if ($null -eq $fw) { $fw = switch ($env:firmware_type) { 'UEFI' { 2 } 'Legacy' { 1 } default { $null } } }
 $sb = Safe { [int](Get-ItemProperty 'HKLM:\\SYSTEM\\CurrentControlSet\\Control\\SecureBoot\\State' -ErrorAction Stop).UEFISecureBootEnabled }
 $tpm = Safe { Get-CimInstance -Namespace 'root\\cimv2\\Security\\MicrosoftTpm' -ClassName Win32_Tpm -ErrorAction Stop | Select-Object -First 1 }
 $gpu = @(Safe { Get-CimInstance Win32_VideoController })

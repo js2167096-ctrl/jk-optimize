@@ -117,7 +117,29 @@ export function usePerf(intervalSeconds: number, historySize = 90): PerfView {
   }
 }
 
-export const maxGpu = (s: PerfSample | null) => (s && s.gpus.length ? Math.max(...s.gpus.map((g) => g.utilizationPct)) : null)
+/**
+ * Espera a primeira amostra do coletor mais nova que `ts` (ms). Serve para medir "depois" de uma ação sem usar o valor
+ * capturado na renderização anterior. Devolve null se nenhuma chegar dentro de `timeoutMs`.
+ */
+export function nextSampleAfter(ts: number, timeoutMs: number): Promise<PerfSample | null> {
+  if (latest && latest.ts > ts) return Promise.resolve(latest)
+  return new Promise((resolve) => {
+    const watcher = () => {
+      if (latest && latest.ts > ts) done(latest)
+    }
+    const timer = setTimeout(() => done(null), timeoutMs)
+    const done = (sample: PerfSample | null) => {
+      clearTimeout(timer)
+      subscribers.delete(watcher)
+      if (subscribers.size === 0) disconnect()
+      resolve(sample)
+    }
+    subscribers.add(watcher)
+    if (subscribers.size === 1) connect()
+  })
+}
+
+export const maxGpu =(s: PerfSample | null) => (s && s.gpus.length ? Math.max(...s.gpus.map((g) => g.utilizationPct)) : null)
 
 export function temperatures(s: PerfSample | null): { label: string; celsius: number; source: string }[] {
   if (!s) return []

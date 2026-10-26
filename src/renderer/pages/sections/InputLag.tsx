@@ -9,7 +9,7 @@ import { useApp } from '../../hooks/useApp'
 import { Button } from '../../components/ui'
 
 interface Report {
-  mouse: { acceleration: boolean; speed: string | null; threshold1: string | null; threshold2: string | null; sensitivity: number | null }
+  mouse: { acceleration: boolean | null; speed: string | null; threshold1: string | null; threshold2: string | null; sensitivity: number | null }
   keyboard: { delay: number | null; rate: number | null }
   displays: { adapter: string; width: number | null; height: number | null; hz: number | null }[]
   readAt: string
@@ -29,7 +29,7 @@ export function InputLagPage() {
           <QueryView state={rep}>
             {(r) => (
               <div className="grid gap-x-8 md:grid-cols-2" data-inputlag-report>
-                <InfoRow label="Aceleração do ponteiro" value={<Badge tone={r.mouse.acceleration ? 'warn' : 'ok'}>{r.mouse.acceleration ? 'Ativada ("Aprimorar precisão do ponteiro")' : 'Desativada'}</Badge>} />
+                <InfoRow label="Aceleração do ponteiro" value={r.mouse.acceleration === null ? <Badge tone="info">Não foi possível ler</Badge> : <Badge tone={r.mouse.acceleration ? 'warn' : 'ok'}>{r.mouse.acceleration ? 'Ativada ("Aprimorar precisão do ponteiro")' : 'Desativada'}</Badge>} />
                 <InfoRow label="Velocidade do ponteiro (1–20)" value={r.mouse.sensitivity ?? '—'} />
                 <InfoRow label="Atraso do teclado (0–3)" value={r.keyboard.delay ?? '—'} />
                 <InfoRow label="Taxa de repetição (0–31)" value={r.keyboard.rate ?? '—'} />
